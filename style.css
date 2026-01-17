@@ -1,5 +1,5 @@
 :root {
-  /* Variables de color para facilitar cambios globales */
+  /* Variables de color */
   --bg-color-C: #02b65e;
   --bg-color-D: #f0d20e;
   --bg-color-E: #d04559;
@@ -22,14 +22,13 @@ body {
   margin: 0;
   min-height: 100vh;
   display: flex;
-  flex-direction: column; /* Cambiado para acomodar el título */
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  font-family: Helvetica, Arial, Sans-Serif; /* Movido al body para herencia */
-  background-color: #f4f4f4; /* Fondo suave para contraste */
+  font-family: Helvetica, Arial, Sans-Serif;
+  background-color: #f4f4f4;
 }
 
-/* Estilos para el título */
 .title {
   text-align: center;
   margin-bottom: 20px;
@@ -39,25 +38,30 @@ body {
 }
 
 .contenedor {
-  width: min(70%, 900px);
-  height: min(70vh, 420px);
+  width: min(90%, 900px); /* Un poco más ancho por defecto */
+  height: min(70vh, 450px);
   display: flex;
   align-items: center;
   justify-content: space-evenly;
   padding: 16px;
-  background: white; /* Contenedor blanco */
-  border-radius: 20px; /* Bordes redondeados */
-  box-shadow: 0 10px 20px rgba(0,0,0,0.1); /* Sombra suave */
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+  gap: 10px; /* Espacio entre notas */
 }
 
 .note {
-  width: 10%;
-  border-radius: 20px;
+  /* En escritorio, el ancho es compartido equitativamente */
+  flex: 1;
+  /* La altura depende de la variable --size */
+  height: calc(var(--size, 1) * 100%); 
+  
+  border-radius: 10px; /* Bordes menos redondeados para parecer barras */
   cursor: pointer;
-  border: 0;
+  border: none;
   
   display: flex;
-  flex-direction: column; /* Para apilar texto y tecla */
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   
@@ -68,11 +72,17 @@ body {
   user-select: none;
   touch-action: manipulation;
   
-  transition: box-shadow 120ms ease, transform 100ms; /* Añadida transición de transform */
+  /* Degradado sutil para efecto 3D */
+  background-image: linear-gradient(
+    to bottom right, 
+    rgba(255,255,255,0.3) 0%, 
+    rgba(0,0,0,0.1) 100%
+  );
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.4);
+  
   position: relative;
 }
 
-/* Estilo para la tecla pequeña */
 .note small {
   font-size: 0.8rem;
   opacity: 0.7;
@@ -83,55 +93,61 @@ body {
 .note:focus-visible {
   outline: 3px solid var(--focus-outline);
   outline-offset: 4px;
+  z-index: 1;
 }
 
-/* Uso de variables CSS */
-.note[data-note="C"] { background: var(--bg-color-C); height: 90%; }
-.note[data-note="D"] { background: var(--bg-color-D); height: 80%; }
-.note[data-note="E"] { background: var(--bg-color-E); height: 70%; }
-.note[data-note="F"] { background: var(--bg-color-F); height: 60%; }
-.note[data-note="G"] { background: var(--bg-color-G); height: 50%; }
-.note[data-note="A"] { background: var(--bg-color-A); height: 40%; }
-.note[data-note="B"] { background: var(--bg-color-B); height: 30%; }
-.note[data-note="C2"] { background: var(--bg-color-C2); height: 20%; }
+/* Asignación de variables de tamaño y color */
+.note[data-note="C"]  { background-color: var(--bg-color-C);  --size: 0.95; }
+.note[data-note="D"]  { background-color: var(--bg-color-D);  --size: 0.85; }
+.note[data-note="E"]  { background-color: var(--bg-color-E);  --size: 0.75; }
+.note[data-note="F"]  { background-color: var(--bg-color-F);  --size: 0.65; }
+.note[data-note="G"]  { background-color: var(--bg-color-G);  --size: 0.55; }
+.note[data-note="A"]  { background-color: var(--bg-color-A);  --size: 0.45; }
+.note[data-note="B"]  { background-color: var(--bg-color-B);  --size: 0.35; }
+.note[data-note="C2"] { background-color: var(--bg-color-C2); --size: 0.25; }
+
+/* Animación de pulsación usando Keyframes para mayor robustez */
+@keyframes hit {
+  0% { transform: scale(1); }
+  30% { transform: scale(0.92); box-shadow: 0 0 15px rgba(0,0,0,0.3); }
+  100% { transform: scale(1); }
+}
 
 .note.is-active {
-  box-shadow: var(--active-shadow);
-  transform: scale(0.95); /* Efecto visual de pulsación */
+  animation: hit 0.15s ease-out forwards;
 }
 
-@media screen and (max-width: 769px) {
+/* RESPONSIVE DESIGN: MÓVIL (Vertical) */
+@media screen and (max-width: 600px) {
   .contenedor {
+    /* Cambiamos a columna vertical */
+    flex-direction: column;
+    height: 85vh; /* Ocupar casi toda la altura */
     width: 90%;
-    /* En móviles, a veces rotar todo el contenedor es confuso si hay texto,
-       pero mantenemos tu lógica original ajustada */
-    transform: rotate(270deg); 
-    height: 70vh;
-    box-shadow: none; /* Quitamos sombra en rotación compleja */
-    background: transparent;
-  }
-  .note {
-    margin: 0 15px;
     padding: 10px;
-    /* Al rotar, el texto queda de lado. Podríamos rotar el texto individualmente */
-    transform: rotate(90deg); 
   }
-  .note.is-active {
-    transform: rotate(90deg) scale(0.95); /* Mantener rotación al pulsar */
+  
+  .note {
+    /* En móvil, la altura es compartida equitativamente */
+    flex: 1;
+    height: auto;
+    /* El ancho depende de la variable --size */
+    width: calc(var(--size, 1) * 100%);
+    
+    /* Ajustes visuales para móvil */
+    flex-direction: row; /* Texto horizontal */
+    justify-content: space-between; /* Separar nota y tecla */
+    padding: 0 20px;
+    margin: 2px 0; /* Pequeña separación vertical */
+  }
+  
+  .note small {
+    margin-top: 0;
+    margin-left: 10px;
   }
   
   .title {
-    display: none; /* Ocultar título en vista rotada para espacio */
-  }
-}
-
-@media screen and (max-width: 480px) {
-  .contenedor {
-    height: 45vh;
-    width: 60%;
-  }
-  .note {
-    margin: 0 15px;
-    padding: 13px;
+    font-size: 1.2rem;
+    margin-bottom: 10px;
   }
 }

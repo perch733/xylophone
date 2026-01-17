@@ -45,14 +45,29 @@
       });
     }
 
-    // Añadimos la clase visual para la animación
+    // --- MEJORA DE ANIMACIÓN ---
+    // En lugar de usar setTimeout, reiniciamos la animación CSS.
+    // Esto es vital si el usuario toca la tecla muy rápido ("spamming").
+    
+    // 1. Quitamos la clase si ya existe
+    noteButton.classList.remove("is-active");
+    
+    // 2. Forzamos un "Reflow" (repintado). 
+    // Al leer offsetWidth, obligamos al navegador a aplicar el cambio anterior (quitar clase)
+    // antes de aplicar el siguiente (ponerla de nuevo).
+    void noteButton.offsetWidth; 
+    
+    // 3. Añadimos la clase de nuevo para reiniciar la animación definida en CSS (@keyframes hit)
     noteButton.classList.add("is-active");
     
-    // Quitamos la clase después de un tiempo corto para terminar la animación.
-    // Usamos setTimeout para esperar 180ms.
-    window.setTimeout(() => {
-      noteButton.classList.remove("is-active");
-    }, 180);
+    // Nota: Ya no necesitamos setTimeout porque CSS @keyframes controla la duración
+    // y al quitar la clase arriba, ya estamos reseteando el estado.
+    // Si quisieras limpiar la clase al final de la animación para ser purista:
+    const removeClass = () => {
+        noteButton.classList.remove("is-active");
+        noteButton.removeEventListener("animationend", removeClass);
+    };
+    noteButton.addEventListener("animationend", removeClass);
   };
 
   // Escuchamos eventos de puntero (ratón, táctil, lápiz) en el contenedor (Delegación de eventos).
