@@ -8,16 +8,19 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <div class="contenedor">
-      <button class="note" type="button" data-note="C" aria-label="Do">DO</button>
-      <button class="note" type="button" data-note="D" aria-label="Re">RE</button>
-      <button class="note" type="button" data-note="E" aria-label="Mi">MI</button>
-      <button class="note" type="button" data-note="F" aria-label="Fa">FA</button>
-      <button class="note" type="button" data-note="G" aria-label="Sol">SOL</button>
-      <button class="note" type="button" data-note="A" aria-label="La">LA</button>
-      <button class="note" type="button" data-note="B" aria-label="Si">SI</button>
-      <button class="note" type="button" data-note="C2" aria-label="Do (octava alta)">DO</button>
-    </div>
+    <main>
+      <h1 class="title">Xilófono Virtual</h1>
+      <div class="contenedor">
+        <button class="note" type="button" data-note="C" data-key="a" aria-label="Do">DO <small>(A)</small></button>
+        <button class="note" type="button" data-note="D" data-key="s" aria-label="Re">RE <small>(S)</small></button>
+        <button class="note" type="button" data-note="E" data-key="d" aria-label="Mi">MI <small>(D)</small></button>
+        <button class="note" type="button" data-note="F" data-key="f" aria-label="Fa">FA <small>(F)</small></button>
+        <button class="note" type="button" data-note="G" data-key="g" aria-label="Sol">SOL <small>(G)</small></button>
+        <button class="note" type="button" data-note="A" data-key="h" aria-label="La">LA <small>(H)</small></button>
+        <button class="note" type="button" data-note="B" data-key="j" aria-label="Si">SI <small>(J)</small></button>
+        <button class="note" type="button" data-note="C2" data-key="k" aria-label="Do (octava alta)">DO <small>(K)</small></button>
+      </div>
+    </main>
 
     <script src="script.js"></script>
   </body>

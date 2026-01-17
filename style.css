@@ -1,3 +1,17 @@
+:root {
+  /* Variables de color para facilitar cambios globales */
+  --bg-color-C: #02b65e;
+  --bg-color-D: #f0d20e;
+  --bg-color-E: #d04559;
+  --bg-color-F: #e28c12;
+  --bg-color-G: #8e83c8;
+  --bg-color-A: #0285d4;
+  --bg-color-B: #fdc1c0;
+  --bg-color-C2: #be3c22;
+  --focus-outline: rgba(0, 0, 0, 0.55);
+  --active-shadow: 0px 0px 10px black;
+}
+
 *,
 *::before,
 *::after {
@@ -8,8 +22,20 @@ body {
   margin: 0;
   min-height: 100vh;
   display: flex;
+  flex-direction: column; /* Cambiado para acomodar el título */
   justify-content: center;
   align-items: center;
+  font-family: Helvetica, Arial, Sans-Serif; /* Movido al body para herencia */
+  background-color: #f4f4f4; /* Fondo suave para contraste */
+}
+
+/* Estilos para el título */
+.title {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333;
+  text-transform: uppercase;
+  letter-spacing: 2px;
 }
 
 .contenedor {
@@ -19,87 +45,86 @@ body {
   align-items: center;
   justify-content: space-evenly;
   padding: 16px;
+  background: white; /* Contenedor blanco */
+  border-radius: 20px; /* Bordes redondeados */
+  box-shadow: 0 10px 20px rgba(0,0,0,0.1); /* Sombra suave */
 }
+
 .note {
   width: 10%;
   border-radius: 20px;
   cursor: pointer;
   border: 0;
-
+  
   display: flex;
+  flex-direction: column; /* Para apilar texto y tecla */
   justify-content: center;
   align-items: center;
-
-  font-family: Helvetica, Arial, Sans-Serif;
+  
+  font-family: inherit;
   color: rgb(0, 0, 0);
   font-weight: bold;
   font-size: 1.5rem;
   user-select: none;
   touch-action: manipulation;
+  
+  transition: box-shadow 120ms ease, transform 100ms; /* Añadida transición de transform */
+  position: relative;
+}
 
-  transition: box-shadow 120ms ease;
+/* Estilo para la tecla pequeña */
+.note small {
+  font-size: 0.8rem;
+  opacity: 0.7;
+  margin-top: 5px;
+  font-weight: normal;
 }
 
 .note:focus-visible {
-  outline: 3px solid rgba(0, 0, 0, 0.55);
+  outline: 3px solid var(--focus-outline);
   outline-offset: 4px;
 }
 
-.note[data-note="C"] {
-  background: #02b65e;
-  height: 90%;
-}
-
-.note[data-note="D"] {
-  background: #f0d20e;
-  height: 80%;
-}
-
-.note[data-note="E"] {
-  background: #d04559;
-  height: 70%;
-}
-
-.note[data-note="F"] {
-  background: #e28c12;
-  height: 60%;
-}
-
-.note[data-note="G"] {
-  background: #8e83c8;
-  height: 50%;
-}
-
-.note[data-note="A"] {
-  background: #0285d4;
-  height: 40%;
-}
-
-.note[data-note="B"] {
-  background: #fdc1c0;
-  height: 30%;
-}
-
-.note[data-note="C2"] {
-  background: #be3c22;
-  height: 20%;
-}
+/* Uso de variables CSS */
+.note[data-note="C"] { background: var(--bg-color-C); height: 90%; }
+.note[data-note="D"] { background: var(--bg-color-D); height: 80%; }
+.note[data-note="E"] { background: var(--bg-color-E); height: 70%; }
+.note[data-note="F"] { background: var(--bg-color-F); height: 60%; }
+.note[data-note="G"] { background: var(--bg-color-G); height: 50%; }
+.note[data-note="A"] { background: var(--bg-color-A); height: 40%; }
+.note[data-note="B"] { background: var(--bg-color-B); height: 30%; }
+.note[data-note="C2"] { background: var(--bg-color-C2); height: 20%; }
 
 .note.is-active {
-  box-shadow: 0px 0px 10px black;
+  box-shadow: var(--active-shadow);
+  transform: scale(0.95); /* Efecto visual de pulsación */
 }
 
 @media screen and (max-width: 769px) {
   .contenedor {
     width: 90%;
-    transform: rotate(270deg);
+    /* En móviles, a veces rotar todo el contenedor es confuso si hay texto,
+       pero mantenemos tu lógica original ajustada */
+    transform: rotate(270deg); 
     height: 70vh;
+    box-shadow: none; /* Quitamos sombra en rotación compleja */
+    background: transparent;
   }
   .note {
     margin: 0 15px;
     padding: 10px;
+    /* Al rotar, el texto queda de lado. Podríamos rotar el texto individualmente */
+    transform: rotate(90deg); 
+  }
+  .note.is-active {
+    transform: rotate(90deg) scale(0.95); /* Mantener rotación al pulsar */
+  }
+  
+  .title {
+    display: none; /* Ocultar título en vista rotada para espacio */
   }
 }
+
 @media screen and (max-width: 480px) {
   .contenedor {
     height: 45vh;
