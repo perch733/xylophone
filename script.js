@@ -1,34 +1,44 @@
 (() => {
-  let xylophone = document.querySelector(".contenedor");
+  const container = document.querySelector(".contenedor");
+  if (!container) return;
 
-  const soundKey = {
-    C: new Audio(`sound/C.mp3`),
-    D: new Audio(`sound/D.mp3`),
-    E: new Audio(`sound/E.mp3`),
-    F: new Audio(`sound/F.mp3`),
-    G: new Audio(`sound/G.mp3`),
-    A: new Audio(`sound/A.mp3`),
-    B: new Audio(`sound/B.mp3`),
-    C2: new Audio(`sound/C2.mp3`),
-  };
-  const tocar = (e) => {
-    let sound = soundKey[e.target.id];
-    sound.pause();
-    sound.currentTime = 0;
-    sound.play();
-    e.target.classList.add("sombra");
-    setTimeout(() => {
-      e.target.classList.remove("sombra");
-    }, 250);
+  const noteButtons = container.querySelectorAll(".note[data-note]");
+  const audioByNote = new Map();
+
+  for (const button of noteButtons) {
+    const note = button.dataset.note;
+    audioByNote.set(note, new Audio(`sound/${note}.mp3`));
+  }
+
+  const playNote = (noteButton) => {
+    const note = noteButton.dataset.note;
+    const audio = audioByNote.get(note);
+    if (!audio) return;
+
+    audio.pause();
+    audio.currentTime = 0;
+    const playPromise = audio.play();
+    if (playPromise && typeof playPromise.catch === "function") {
+      playPromise.catch(() => {});
+    }
+
+    noteButton.classList.add("is-active");
+    window.setTimeout(() => {
+      noteButton.classList.remove("is-active");
+    }, 180);
   };
 
-  const metallophone = (evento) => {
-    xylophone.addEventListener(evento, (e) => {
-      if (e.target.classList.contains("note")) {
-        tocar(e);
-      }
-    });
-  };
-  /* preguntamos si existe el evento "ontouchstart" */
-  "ontouchstart" in window ? metallophone("touchstart") : metallophone("click");
+  container.addEventListener("pointerdown", (event) => {
+    const noteButton = event.target.closest(".note[data-note]");
+    if (!noteButton || !container.contains(noteButton)) return;
+    playNote(noteButton);
+  });
+
+  container.addEventListener("keydown", (event) => {
+    if (event.key !== "Enter" && event.key !== " ") return;
+    const noteButton = event.target.closest(".note[data-note]");
+    if (!noteButton || !container.contains(noteButton)) return;
+    event.preventDefault();
+    playNote(noteButton);
+  });
 })();

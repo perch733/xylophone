@@ -1,23 +1,30 @@
-body {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
 
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .contenedor {
-  width: 70%;
+  width: min(70%, 900px);
+  height: min(70vh, 420px);
   display: flex;
   align-items: center;
   justify-content: space-evenly;
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  margin: auto;
+  padding: 16px;
 }
 .note {
   width: 10%;
   border-radius: 20px;
   cursor: pointer;
+  border: 0;
 
   display: flex;
   justify-content: center;
@@ -27,57 +34,58 @@ body {
   color: rgb(0, 0, 0);
   font-weight: bold;
   font-size: 1.5rem;
+  user-select: none;
+  touch-action: manipulation;
+
+  transition: box-shadow 120ms ease;
 }
 
-.note:nth-child(1) {
+.note:focus-visible {
+  outline: 3px solid rgba(0, 0, 0, 0.55);
+  outline-offset: 4px;
+}
+
+.note[data-note="C"] {
   background: #02b65e;
   height: 90%;
 }
 
-.note:nth-child(2) {
+.note[data-note="D"] {
   background: #f0d20e;
   height: 80%;
 }
 
-.note:nth-child(3) {
+.note[data-note="E"] {
   background: #d04559;
   height: 70%;
 }
 
-.note:nth-child(4) {
+.note[data-note="F"] {
   background: #e28c12;
   height: 60%;
 }
 
-.note:nth-child(5) {
+.note[data-note="G"] {
   background: #8e83c8;
   height: 50%;
 }
 
-.note:nth-child(6) {
+.note[data-note="A"] {
   background: #0285d4;
   height: 40%;
 }
 
-.note:nth-child(7) {
+.note[data-note="B"] {
   background: #fdc1c0;
   height: 30%;
 }
 
-.note:nth-child(8) {
+.note[data-note="C2"] {
   background: #be3c22;
   height: 20%;
 }
 
-.white_bold {
-  font-family: Helvetica, Arial, Sans-Serif;
-  color: white;
-  font-weight: bold;
-  font-size: 20px;
-  user-select: none;
-}
-
-.sombra {
+.note.is-active {
   box-shadow: 0px 0px 10px black;
 }
 
